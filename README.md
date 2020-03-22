@@ -1,5 +1,5 @@
 # Name-Tagger
- a name tagger built using a MEMM classifier
+A name tagger built using a MEMM classifier
 
 ## Data
 
