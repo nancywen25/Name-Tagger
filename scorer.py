@@ -16,7 +16,7 @@ def score (keyFileName, responseFileName):
 	responseFile = open(responseFileName, 'r')
 	response = responseFile.readlines()
 	if len(key) != len(response):
-    		print "length mismatch between key and submitted file"
+    		print("length mismatch between key and submitted file")
 		exit()
 	correct = 0
 	incorrect = 0
@@ -32,28 +32,28 @@ def score (keyFileName, responseFileName):
 			if response[i] == "":
 				continue
 			else:
-    				print "sentence break expected at line " + str(i)
+    				print("sentence break expected at line " + str(i))
 				exit()
     		keyFields = key[i].split('\t')
 		if len(keyFields) != 2:
-    			print "format error in key at line " + str(i) + ":" + key[i]
+    			print("format error in key at line " + str(i) + ":" + key[i])
 			exit()
 		keyToken = keyFields[0]
 		keyTag = keyFields[1]
     		responseFields = response[i].split('\t')
 		if len(responseFields) != 2:
-    			print "format error at line " + str(i)
+    			print("format error at line " + str(i))
 			exit()
 		responseToken = responseFields[0]
 		responseTag = responseFields[1]
     		if responseToken != keyToken:
-    			print "token mismatch at line " + str(i)
+    			print("token mismatch at line " + str(i))
 			exit()
 		if responseTag == keyTag:
 			correct = correct + 1
 		else:
 			incorrect = incorrect + 1
-                # the previous token ends a group if
+            	# the previous token ends a group if
                 #   we are in a group AND
                 #   the current tag is O OR the current tag is a B tag
                 #   the current tag is an I tag with a different type from the current group
@@ -80,17 +80,17 @@ def score (keyFileName, responseFileName):
 		    keyGroupType = keyTag[2:]
 		elif keyEnd:
 		    keyStart = 0
-	print correct, "out of", str(correct + incorrect) + " tags correct"
+	print(correct, "out of", str(correct + incorrect) + " tags correct")
 	accuracy = 100.0 * correct / (correct + incorrect)
-	print "  accuracy: %5.2f" % accuracy
-	print keyGroupCount, "groups in key"
-	print responseGroupCount, "groups in response"
-	print correctGroupCount, "correct groups"
+	print("  accuracy: %5.2f" % accuracy)
+	print(keyGroupCount, "groups in key")
+	print(responseGroupCount, "groups in response")
+	print(correctGroupCount, "correct groups")
 	precision = 100.0 * correctGroupCount / responseGroupCount
 	recall = 100.0 * correctGroupCount / keyGroupCount
 	F = 2 * precision  * recall / (precision + recall)
-	print "  precision: %5.2f" % precision
-	print "  recall:    %5.2f" % recall
-	print "  F1:        %5.2f" % F
+	print("  precision: %5.2f" % precision)
+	print("  recall:    %5.2f" % recall)
+	print("  F1:        %5.2f" % F)
 
-score ('CONLL_dev.name','response.name')
+score ('data/CONLL_dev.name','data/response.name')
