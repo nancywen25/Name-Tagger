@@ -27,17 +27,33 @@ def read_data(fname):
 
 def feature_builder(sentence):
     """
-    Given a sentence, generate features for each token in a sentence
+    Given a sentence,
+    generate a feature vector for each token
 
     The features may involve previous, current and next tokens,
     parts-of-speech, and chunk tags, as well as combinations of these
     Args:
-        token:
+        sentence:
 
     Returns:
 
     """
-    pass
+
+    basic_features = []
+
+    for token in sentence:
+        d = {"token": token[0],
+            "pos": token[1],
+            "chunk": token[2],
+            "tag": None}
+
+        if len(token) == 4: # includes the name tag
+            d["tag"] = token[3]
+
+        basic_features.append(d)
+
+    return basic_features
+
 
 def enhance_features():
     """
@@ -47,5 +63,14 @@ def enhance_features():
     Returns:
 
     """
-    pass
+    feature_list = []
+    for sentence in sentences:
+        basic_features = feature_builder(sentence)
+        feature_list += basic_features
+
+    feature_df = pd.DataFrame(feature_list)
+
+
+fname_train = "data/CONLL_train.pos-chunk-name"
+sentences = read_data(fname_train)
 
