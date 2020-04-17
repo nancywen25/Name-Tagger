@@ -93,4 +93,4 @@ def score (keyFileName, responseFileName):
 	print("  recall:    %5.2f" % recall)
 	print("  F1:        %5.2f" % F)
 
-score ('data/CONLL_dev.name','output/CONLL_dev.name')
+score('data/CONLL_dev.name','output/CONLL_dev.name')

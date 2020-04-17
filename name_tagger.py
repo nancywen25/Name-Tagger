@@ -137,19 +137,21 @@ def write_data(fname_in, fname_out, df, y):
     with open(fname_in, 'r') as infile:
         with open(fname_out, 'w') as outfile:
             for line in infile:
-                if not line: # empty line
+                if line == '\n': # empty line
                     outfile.write('\n')
+                elif i == len(tokens):
+                    continue
                 else:
                     outfile.write(tokens[i] + "\t" + y[i] + "\n")
                     i += 1
 
-# training model using train data
+# TRAIN: training model using train data
 fname_train = "data/CONLL_train.pos-chunk-name"
 sentences = read_data(fname_train)
 df = extract_features(sentences)
 lr, vec = me_train(df)
 
-# use model to label dev data
+# DEV: use model to label dev data
 fname_dev = "data/CONLL_dev.pos-chunk"
 fname_dev_tag = "data/CONLL_dev.name"
 sentences_dev = read_data(fname_dev)
@@ -158,17 +160,20 @@ df_dev = extract_features(sentences_dev)
 tag_dev = read_data(fname_dev_tag)
 df_tags = get_tags(tag_dev)
 
-y_pred = me_tag(lr, vec, df_dev)
-
 # write predictions to file
-write_data("data/CONLL_dev.pos-chunk", "output/CONLL_dev.name", df_dev, y_pred)
+y_dev = me_tag(lr, vec, df_dev)
+write_data("data/CONLL_dev.pos-chunk", "output/CONLL_dev.name", df_dev, y_dev)
 
 # evaluating dev performance
 y_true = df_dev["tag"].values
-print(accuracy_score(y_true, y_pred))
+print(accuracy_score(y_true, y_dev))
 
-
-
+# TEST: generate output for test data
+fname_test = "data/CONLL_test.pos-chunk"
+sentences_test = read_data(fname_test)
+df_test = extract_features(sentences_test)
+y_test = me_tag(lr, vec, df_test)
+write_data("data/CONLL_test.pos-chunk", "output/CONLL_test.name", df_test, y_test)
 
 
 
